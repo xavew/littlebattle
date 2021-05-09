@@ -14,3 +14,5 @@ if __name__ == "__main__":
     print("Usage: python3 little_battle.py <filepath>")
     sys.exit()
   width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
+
+print("test")
