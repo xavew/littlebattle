@@ -37,8 +37,6 @@ def load_config_file(filepath):
     global height
     width = frameText[0:1]
     height = frameText[2:3]
-    print(width)
-    print(height)
 
   # Function used to check if a resource coordinate is already in use
   def checkExists(cords):
@@ -132,8 +130,23 @@ def load_config_file(filepath):
   checkFrameContent()
   setCords()
 
-  #print("Configuration file {} was loaded.".format(str(filepath)))
+  print(width)
+  print(height)
+  print("Configuration file " + filepath + " was loaded.")
   return width, height, waters, woods, foods, golds
+
+def quit():
+  exit()
+
+def pris():
+  print("""
+  Recruit Prices:
+    Spearman (S) - 1W, 1F
+    Archer (A) - 1W, 1G
+    Knight (K) - 1F, 1G
+    Scout (T) - 1W, 1F, 1G
+  (enter PRIS to display the price list)
+  """)
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
