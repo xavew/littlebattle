@@ -27,15 +27,18 @@ def load_config_file(filepath):
 
   def checkFrameContent():
     frameText = content[0].split(" ")[1]
-
-    if frameText[0:1].isdigit() and frameText[1:2] == "x" and frameText[2:3].isdigit:
-      if 4 < int(frameText[0:1]) < 8 and 4 < int(frameText[2:3]) < 8:
-        width = frameText[0:1]
-        height = frameText[2:3]
-      else:
-        raise ArithmeticError(" Invalid Configuration File: width and height should range from 5 to 7!")
-    else:
+    
+    if frameText[0:1].isdigit() == False or frameText[1:2] != "x" or frameText[2:3].isdigit() == False:
       raise SyntaxError("Invalid Configuration File: frame should be in format widthxheight!")
+    if 7 < int(frameText[0:1]) < 5 or 7 < int(frameText[2:3]) < 5:
+      raise ArithmeticError(" Invalid Configuration File: width and height should range from 5 to 7!")
+
+    global width
+    global height
+    width = frameText[0:1]
+    height = frameText[2:3]
+    print(width)
+    print(height)
 
   # Function used to check if a resource coordinate is already in use
   def checkExists(cords):
@@ -49,10 +52,36 @@ def load_config_file(filepath):
       return True
     else:
       return False
-
   def checkValid(cords):
-    
-    pass
+    if cords == (1,1):
+      return True
+    if cords == (width-2,height-2):
+      return True
+    if cords == (0,1):
+      return True
+    if cords == (1,0):
+      return True
+    if cords == (2,1):
+      return True
+    if cords == (1,2):
+      return True
+    if cords == (width-3,height-2):
+      return True
+    if cords == (width-2,height-3):
+      return True
+    if cords == (width-2,height-1):
+      return True
+    if cords == (width-1,height-2):
+      return True
+    else:
+      return False
+  def checkOutOfMap(cords):
+    if width < cords[0] < 0:
+      return True
+    elif height < cords[1] < 0:
+      return True
+    else:
+      return False
 
   def setCords():
     item = waters
@@ -73,8 +102,14 @@ def load_config_file(filepath):
 
       while index < length:
         cords = (int(itemContent[index:index+1]),int(itemContent[index+1:index+2]))
+
         if checkExists(cords):
           raise SyntaxError("Invalid Configuration File: Duplicate position ({}, {})!".format(cords[0],cords[1]))
+        if checkValid(cords):
+          raise ValueError("Invalid Configuration File: The positions of home bases or the positions next to the home bases are occupied!")
+        if checkOutOfMap(cords):
+          raise ArithmeticError("Invalid Configuration File: {} contains a position that is out of map.".format(itemName))
+
         item.append(cords)
         index += 2
 
@@ -96,14 +131,8 @@ def load_config_file(filepath):
   checkInitialFormat()
   checkFrameContent()
   setCords()
-  print("Water:")
-  print(waters)
-  print("Wood:")
-  print(woods)
-  print("Food:")
-  print(foods)
-  print("Gold:")
-  print(golds)
+
+  #print("Configuration file {} was loaded.".format(str(filepath)))
   return width, height, waters, woods, foods, golds
 
 if __name__ == "__main__":
