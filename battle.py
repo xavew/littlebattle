@@ -1,4 +1,5 @@
 import sys
+from player import Player
 
 class Battle:
   def __init__(self,width, height):
@@ -8,8 +9,7 @@ class Battle:
         for column in range(width):
             list.append("  ")
         self.board.append(list)
-    
-    Battle.printGameState(width, height)
+    print("Game Started: Little Battle! (enter QUIT to quit the game)")
 
   def setResources(self,list,resource):
       for i in list:
@@ -22,6 +22,12 @@ class Battle:
         if resource == "wood":
             self.board[i[0]][i[1]] = "WW" 
       
+  def setPos(self,cords,name):
+      x = cords[0]
+      y = cords[1]
+
+      self.board[x][y] = name
+
 
   def printGameState(self,width,height):
     print("\nPlease check the battlefield, commander.")
@@ -52,7 +58,7 @@ class Battle:
     for i in range(width):
         map += "---"
     map = map[:-1]
-    map += "+\n"
+    map += "+"
 
     print(map)
 

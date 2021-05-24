@@ -1,5 +1,6 @@
 import sys
 from battle import Battle
+from player import Player
 
 # Please implement this function according to Section "Read Configuration File"
 def load_config_file(filepath):
@@ -127,30 +128,37 @@ def load_config_file(filepath):
       else:
         break
   
-  def setCordsMap():
 
-    pass
 
   checkInitialFormat()
   checkFrameContent()
   setCords()
+  
 
-  print(width)
-  print(height)
   print("Configuration file " + filepath + " was loaded.")
   return width, height, waters, woods, foods, golds
+
+def setCordsMap():
+  game.setResources(waters,"water")
+  game.setResources(foods,"food")
+  game.setResources(woods,"wood")
+  game.setResources(golds,"gold")
 
 def quit():
   exit()
 
+def dis():
+  game.printGameState(5,5)
+  print("(enter DIS to display the map)")
+
 def pris():
   print("""
-  Recruit Prices:
-    Spearman (S) - 1W, 1F
-    Archer (A) - 1W, 1G
-    Knight (K) - 1F, 1G
-    Scout (T) - 1W, 1F, 1G
-  (enter PRIS to display the price list)
+Recruit Prices:
+  Spearman (S) - 1W, 1F
+  Archer (A) - 1W, 1G
+  Knight (K) - 1F, 1G
+  Scout (T) - 1W, 1F, 1G
+(enter PRIS to display the price list)
   """)
 
 if __name__ == "__main__":
@@ -158,7 +166,19 @@ if __name__ == "__main__":
     print("Usage: python3 little_battle.py <filepath>")
     sys.exit()
   width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
-  game = Battle.__init__(5,5)
-  game.setResources(waters,"water")
+
+  # Initialise battlefield map and players
+  game = Battle(6,7)
+  player1 = Player(1, game)
+  player2 = Player(2, game)
+
+  player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
+  player2.setBase(5,5)
+
+  # Set cordinates and display infomation for player
+  setCordsMap()
+  dis()
+  pris()
+  
   
 
