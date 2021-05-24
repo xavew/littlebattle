@@ -1,4 +1,5 @@
 import sys
+from battle import Battle
 
 # Please implement this function according to Section "Read Configuration File"
 def load_config_file(filepath):
@@ -125,6 +126,10 @@ def load_config_file(filepath):
         itemIndex = 4
       else:
         break
+  
+  def setCordsMap():
+
+    pass
 
   checkInitialFormat()
   checkFrameContent()
@@ -153,4 +158,7 @@ if __name__ == "__main__":
     print("Usage: python3 little_battle.py <filepath>")
     sys.exit()
   width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
+  game = Battle.__init__(5,5)
+  game.setResources(waters,"water")
+  
 
