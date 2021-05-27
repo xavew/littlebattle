@@ -1,5 +1,4 @@
 import sys
-from player import Player
 
 class Battle:
     def __init__(self,width, height):
