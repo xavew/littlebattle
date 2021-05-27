@@ -27,13 +27,22 @@ class Battle:
 
         self.board[x][y] = name
 
-    def checkSurrounds(self,cords):
-        flag = False
+    def setRecruit(self,cords,name,num):
         x = cords[0]
         y = cords[1]
-        if self.board[x+1][y] != "  " and self.board[x-1][y] != "  " and self.board[x][y+1] != "  " and self.board[x][y-1] != "  ":
-            flag = True
-        return flag
+        input = ""
+
+        if name == "s":
+            input = "S{}".format(num)
+        if name == "a":
+            input = "A{}".format(num)
+        if name == "k":
+            input = "K{}".format(num)
+        if name == "t":
+            input = "T{}".format(num)    
+        self.board[x][y] = input
+
+
 
     def printGameState(self,width,height):
         print("\nPlease check the battlefield, commander.")
@@ -73,6 +82,8 @@ class Battle:
 
     def check_finished(self):
         pass
+
+
 
 
 

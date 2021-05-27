@@ -127,7 +127,6 @@ def load_config_file(filepath):
         itemIndex = 4
       else:
         break
-  
 
 
   checkInitialFormat()
@@ -146,6 +145,9 @@ def setCordsMap():
 
 def quit():
   exit()
+
+def checkSurroundsLink(cords):
+  game.checkSurrounds(cords)
 
 def dis():
   game.printGameState(5,5)
@@ -179,6 +181,13 @@ if __name__ == "__main__":
   setCordsMap()
   dis()
   pris()
+
+  currentPlayer = player1
+
+  while currentPlayer != 0:
+    currentPlayer.recruit()
+    dis()
+    currentPlayer = 0
   
   
 
