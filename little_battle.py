@@ -143,25 +143,22 @@ def setCordsMap():
   game.setResources(woods,"wood")
   game.setResources(golds,"gold")
 
-def quit():
-  exit()
-
 def checkSurroundsLink(cords):
   game.checkSurrounds(cords)
 
-def dis():
-  game.printGameState(5,5)
-  print("(enter DIS to display the map)")
+# def dis():
+#   game.printGameState(5,5)
+#   print("(enter DIS to display the map)")
 
-def pris():
-  print("""
-Recruit Prices:
-  Spearman (S) - 1W, 1F
-  Archer (A) - 1W, 1G
-  Knight (K) - 1F, 1G
-  Scout (T) - 1W, 1F, 1G
-(enter PRIS to display the price list)
-  """)
+# def pris():
+#   print("""
+# Recruit Prices:
+#   Spearman (S) - 1W, 1F
+#   Archer (A) - 1W, 1G
+#   Knight (K) - 1F, 1G
+#   Scout (T) - 1W, 1F, 1G
+# (enter PRIS to display the price list)
+#   """)
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
@@ -170,24 +167,35 @@ if __name__ == "__main__":
   width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
 
   # Initialise battlefield map and players
-  game = Battle(6,7)
+  game = Battle(5,5)
   player1 = Player(1, game)
   player2 = Player(2, game)
+  year = 617
 
   player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
   player2.setBase(5,5)
 
   # Set cordinates and display infomation for player
   setCordsMap()
-  dis()
-  pris()
-
+  game.printGameState()
+  game.pris()
   currentPlayer = player1
+  player = 1
 
   while currentPlayer != 0:
+    print("\n-Year {}-\n".format(year))
+    
+    if player == 1:
+      currentPlayer == player2
+      player = 2
+    elif player == 2:
+      currentPlayer == player1
+      player = 1
+
     currentPlayer.recruit()
-    dis()
-    currentPlayer = 0
+    currentPlayer.move()
+    year += 1
+
   
   
 
