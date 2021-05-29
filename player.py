@@ -34,11 +34,11 @@ class Player():
             return True
 
         # # Check resources valid
-        # if (self.inv[0] != 0 and self.inv[1] != 0) or (self.inv[1] != 0 and self.inv[2] != 0) or (self.inv[0] != 0 and self.inv[2] != 0):
-        #     print("No resources to recruit armies.")
-        #     return True
+        if (self.inv[0] == 0 and self.inv[1] == 0) or (self.inv[1] == 0 and self.inv[2] == 0) or (self.inv[0] == 0 and self.inv[2] == 0):
+            print("\nNo resources to recruit armies.\n")
+            return True
 
-        # return False
+        return False
 
     def checkHomeSurrounds(self,cords):
         above = list(self.armyPos[0])
@@ -134,6 +134,16 @@ class Player():
 
                 while True:
                     userRecruitPosition = input("\nYou want to recruit a {}. Enter two integers as format ‘x y’ to place your army. ".format(userRecruitName))
+                    
+                    # Alternative options
+                    if userRecruitPosition == "DIS":
+                        self.game.printGameState()
+                        continue
+                    if userRecruitPosition == "PRIS":
+                        self.game.pris()
+                        continue
+                    if userRecruitPosition == "QUIT":
+                        self.game.quit()
 
                     # Checks if input are numbers
                     if not userRecruitPosition.isdigit():
@@ -171,7 +181,8 @@ class Player():
                             self.army.append(soldier)
                             self.armyPos.append(pos)
                         break
-            break
+            else:
+                break
 
     def playerArmyList(self):
         
@@ -212,7 +223,7 @@ class Player():
         if scout != "Scout: ":
             print(scout[:-1])
 
-    def moveResults(self,cords):
+    def moveResults(self,cords,year):
         
         def challenge(self,soldier,indexPos,o,d):
             # Set destination coordinates
@@ -312,6 +323,11 @@ class Player():
                     del self.armyPos[indexPos]
                     print("We destroyed the enemy Scout with massive loss!\n")
 
+        def gameWin(soldierName):
+            print("The armys {} captured the enemy's capital.\n".format(soldierName))
+            name = input("What's your name, commander? ")
+            print("\n***Congratulations! Emperor {} unified the country in {}.***".format(name,year))
+            
         def movePos(self,o,d,indexPos,soldier):
             # Set destination coordinates
             ox = int(o[0])
@@ -359,6 +375,8 @@ class Player():
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
                 print("\nGood. We collected 2 Gold.")
+            if self.game.board[dx][dy][0] == "H":
+                gameWin(soldierName)
             if self.game.board[dx][dy] == "S{}".format(otherPlayer):
                 challenge(soldier,indexPos,o,d)
             if self.game.board[dx][dy] == "A{}".format(otherPlayer):
@@ -412,10 +430,11 @@ class Player():
             self.game.printGameState()
             return True
 
-    def move(self):
+    def move(self,year):
         print("===Player {}'s Stage: Move Armies===\n".format(self.num))
+
         while True:
-            invalidResponse = "Invalid blah\n"
+            invalidResponse = "Invalid move. Try again.\n"
 
             if len(self.army) == 1:
                 print("No Army to Move: next turn\n")
@@ -446,8 +465,8 @@ class Player():
             and cords[7:8].isnumeric and cords[9:10].isalpha and cords[10:].isnumeric):
                 print(invalidResponse)
                 continue
-            if self.moveResults(cords):
-                break
+            if self.moveResults(cords,year):
+                continue
             else:
                 print(invalidResponse)
                 continue

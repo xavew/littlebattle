@@ -179,7 +179,7 @@ if __name__ == "__main__":
       player = 1
 
     currentPlayer.recruit()
-    currentPlayer.move()
+    currentPlayer.move(year)
     year += 1
 
   
