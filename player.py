@@ -35,7 +35,7 @@ class Player():
 
         # # Check resources valid
         if (self.inv[0] == 0 and self.inv[1] == 0) or (self.inv[1] == 0 and self.inv[2] == 0) or (self.inv[0] == 0 and self.inv[2] == 0):
-            print("\nNo resources to recruit armies.\n")
+            print("No resources to recruit any armies.\n")
             return True
 
         return False
@@ -60,80 +60,108 @@ class Player():
             return False
 
     def recruitFunds(self,soldier):
-        if soldier == "s":
+        if soldier == "S":
             if self.inv[0] - 1 >= 0 and self.inv[1] - 1 >= 0:
                 self.inv[0] -= 1
                 self.inv[1] -= 1
                 return True
-            else:
-                return False
             
-        if soldier == "a":
+        if soldier == "A":
             if self.inv[0] -1 >= 0 and self.inv[2] - 1 >= 0:
                 self.inv[0] -= 1
                 self.inv[2] -= 1
                 return True
-            else:
-                return False
 
-        if soldier == "k":
+        if soldier == "K":
             if self.inv[1] - 1 >= 0 and self.inv[2] - 1 >= 0:
                 self.inv[1] -= 1
                 self.inv[2] -= 1
                 return True
-            else:
-                return False
 
-        if soldier == "t":
+        if soldier == "T":
             if self.inv[0] - 1 >= 0 and self.inv[1] - 1 >= 0 and self.inv[2] - 1 >= 0:
                 self.inv[0] -= 1
                 self.inv[1] -= 1
                 self.inv[2] -= 1
                 return True
+
+    def recruitFundsCheck(self,soldier):
+        if soldier == "S":
+            if self.inv[0] - 1 >= 0 and self.inv[1] - 1 >= 0:
+                return True
+            else:
+                return False
+            
+        if soldier == "A":
+            if self.inv[0] -1 >= 0 and self.inv[2] - 1 >= 0:
+                return True
             else:
                 return False
 
-        # There are four types of soldiers: 
-        # Spearman (S) costs 1W, 1F; 
-        # Archer (A) costs 1W, 1G; 
-        # Knight (K) costs 1F, 1G, 
-        # self.inv = [2,2,2] # Wood, Food, Gold
+        if soldier == "K":
+            if self.inv[1] - 1 >= 0 and self.inv[2] - 1 >= 0:
+                return True
+            else:
+                return False
+
+        if soldier == "T":
+            if self.inv[0] - 1 >= 0 and self.inv[1] - 1 >= 0 and self.inv[2] - 1 >= 0:
+                return True
+            else:
+                return False
 
     def recruit(self):
         print("+++Player {}'s Stage: Recruit Armies+++".format(self.num))
 
         while True:
             
-            print("\n[Your Asset: Wood - x{} Food - x{} Gold - x{}]".format(self.inv[0],self.inv[1],self.inv[2]))
+            print("\n[Your Asset: Wood - {} Food - {} Gold - {}]".format(self.inv[0],self.inv[1],self.inv[2]))
 
             if not self.checkRecruitValid(): # CHANGE THIS TO INVERSE
-                userRecruitName = ""
-                userRecruit = input("\nWhich type of army to recruit, (enter) 'S','A','K', or 'T'? Enter 'NO' to end this stage. ")
-                userRecruit = userRecruit.lower()
+                while True:
+                    userRecruitName = ""
+                    userRecruit = input("\nWhich type of army to recruit, (enter) ‘S’, ‘A’, ‘K’, or ‘T’? Enter ‘NO’ to end this stage.\n")
 
-                # Set soldier name
-                if userRecruit == "s":
-                    userRecruitName = "Spearman"
-                elif userRecruit == "a":
-                    userRecruitName = "Archer"
-                elif userRecruit == "k":
-                    userRecruitName = "Knight"
-                elif userRecruit == "t":
-                    userRecruitName = "Scout"
-                elif userRecruit == "dis":
-                    self.game.printGameState()
-                    continue
-                elif userRecruit == "pris":
-                    self.game.pris()
-                    continue
-                elif userRecruit == "quit":
-                    self.game.quit()
-                    continue
-                if userRecruit == "no":
+                    # Alternative options
+                    if userRecruit == "DIS":
+                        self.game.printGameState()
+                        continue
+                    elif userRecruit == "PRIS":
+                        self.game.pris()
+                        continue
+                    elif userRecruit == "QUIT":
+                        self.game.quit()
+                    elif userRecruit == "NO":
+                        break
+
+                    
+
+                    # Set soldier name
+                    if userRecruit == "S":
+                        userRecruitName = "Spearman"                        
+                    elif userRecruit == "A":
+                        userRecruitName = "Archer"                      
+                    elif userRecruit == "K":
+                        userRecruitName = "Knight"                       
+                    elif userRecruit == "T":
+                        userRecruitName = "Scout"
+                    else:
+                        print("Sorry, invalid input. Try again.")
+                        continue
+
+                    if not self.recruitFundsCheck(userRecruit):
+                        print("Insufficient resources. Try again.")
+                        continue
+
                     break
 
+                if userRecruit == "NO":
+                    break
+
+                
+
                 while True:
-                    userRecruitPosition = input("\nYou want to recruit a {}. Enter two integers as format ‘x y’ to place your army. ".format(userRecruitName))
+                    userRecruitPosition = input("\nYou want to recruit a {}. Enter two integers as format ‘x y’ to place your army.\n".format(userRecruitName))
                     
                     # Alternative options
                     if userRecruitPosition == "DIS":
@@ -146,37 +174,39 @@ class Player():
                         self.game.quit()
 
                     # Checks if input are numbers
-                    if not userRecruitPosition.isdigit():
+                    if len(userRecruitPosition) != 3:
+                        print("Sorry, invalid input. Try again.")
+                        continue
+                    if not userRecruitPosition[0].isdigit() and userRecruitPosition[2].isdigit:
                         print("Sorry, invalid input. Try again.")
                         continue # CHECK HERE, MIGHT CAUSE ERRORS
                 
-                    pos = (int(userRecruitPosition[0]),int(userRecruitPosition[1]))
+                    pos = (int(userRecruitPosition[0]),int(userRecruitPosition[2]))
+
                     # Checks if input is next to home base and if position is already taken
                     if not self.checkHomeSurrounds(pos) or self.game.board[pos[0]][pos[1]] != "  ":
                         print("You must place your newly recruited unit in an unoccupied position next to your home base. Try again.")
                         continue
 
                     # Applies recruit and cost calculation
-                    if not self.recruitFunds(userRecruit):
-                        print("Insufficient resources. Try again.")
-                    else:
-                        print("You has recruited a {}\n".format(userRecruitName))
+                    if self.recruitFunds(userRecruit):
+                        print("\nYou has recruited a {}.".format(userRecruitName))
                         self.game.setRecruit(pos,userRecruit,self.num)
 
                         soldier = ""
-                        if userRecruit == "s":
+                        if userRecruit == "S":
                             soldier = "S{}".format(self.num)
                             self.army.append(soldier)
                             self.armyPos.append(pos)
-                        if userRecruit == "a":
+                        if userRecruit == "A":
                             soldier = "A{}".format(self.num)
                             self.army.append(soldier)
                             self.armyPos.append(pos)
-                        if userRecruit == "k":
+                        if userRecruit == "K":
                             soldier = "K{}".format(self.num)
                             self.army.append(soldier)
                             self.armyPos.append(pos)
-                        if userRecruit == "t":
+                        if userRecruit == "T":
                             soldier = "T{}".format(self.num)   
                             self.army.append(soldier)
                             self.armyPos.append(pos)
@@ -184,16 +214,12 @@ class Player():
             else:
                 break
 
-    def playerArmyList(self):
-        
-        def formatting(cords):
-            return ("(x{},y{})".format(cords[0],cords[1]))
-
+    def playerArmyList(self,armyMove):
         n = self.num
-        spearman = "Spearman: "
-        archer = "Archer: "
-        knight = "Knight: "
-        scout = "Scout: "
+        spearman = "  Spearman: "
+        archer = "  Archer: "
+        knight = "  Knight: "
+        scout = "  Scout: "
         index = 0
 
         for i in self.army:
@@ -201,29 +227,33 @@ class Player():
                 index += 1
                 continue
             elif i == "S{}".format(n):
-                spearman += "{},".format(formatting(self.armyPos[index]))
-                index += 1
+                if armyMove[index] == 1:
+                    spearman += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    index += 1
             elif i == "A{}".format(n):
-                archer += "{},".format(formatting(self.armyPos[index]))
-                index += 1
+                if armyMove[index] == 1:
+                    archer += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    index += 1
             elif i == "K{}".format(n):
-                knight += "{},".format(formatting(self.armyPos[index]))
-                index += 1
+                if armyMove[index] == 1:
+                    knight += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    index += 1
             elif i == "T{}".format(n):
-                scout += "{},".format(formatting(self.armyPos[index]))
-                index += 1
+                if armyMove[index] == 1:
+                    scout += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    index += 1
                 
-        print("Armies to Move:")
-        if spearman != "Spearman: ":
+        print("\nArmies to Move:")
+        if spearman != "  Spearman: ":
             print(spearman[:-1])
-        if archer != "Archer: ":
+        if archer != "  Archer: ":
             print(archer[:-1])
-        if knight != "Knight: ":
+        if knight != "  Knight: ":
             print(knight[:-1])
-        if scout != "Scout: ":
+        if scout != "  Scout: ":
             print(scout[:-1])
 
-    def moveResults(self,cords,year):
+    def moveResults(self,cords,year,armyMove):
         
         def challenge(self,soldier,indexPos,o,d):
             # Set destination coordinates
@@ -346,7 +376,7 @@ class Player():
             elif soldier[0] == "T":
                 soldierName = "Scout"
 
-            print("\nYou have moved {} from (x{},y{}) to (x{},y{}).".format(soldierName,ox,oy,dx,dy))
+            print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,ox,oy,dx,dy))
 
             if self.game.board[dx][dy] == "  ":
                 self.game.board[dx][dy] = self.army[indexPos]
@@ -356,25 +386,25 @@ class Player():
                 self.game.board[ox][oy] = "  "
                 del self.armyPos[indexPos]
                 del self.army[indexPos]
-                print("\nWe lost the army {} due to your command!".format(soldierName))
+                print("We lost the army {} due to your command!".format(soldierName))
             if self.game.board[dx][dy] == "WW":
                 self.inv[0] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
-                print("\nGood. We collected 2 Wood.")
+                print("Good. We collected 2 Wood.")
             if self.game.board[dx][dy] == "FF":
                 self.inv[1] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
-                print("\nGood. We collected 2 Food.")
+                print("Good. We collected 2 Food.")
             if self.game.board[dx][dy] == "GG":
                 self.inv[2] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
-                print("\nGood. We collected 2 Gold.")
+                print("Good. We collected 2 Gold.")
             if self.game.board[dx][dy][0] == "H":
                 gameWin(soldierName)
             if self.game.board[dx][dy] == "S{}".format(otherPlayer):
@@ -387,22 +417,18 @@ class Player():
                 challenge(soldier,indexPos,o,d)
 
         # Set coordinates
-        origin = (int(cords[1]),int(cords[4]))
-        destination = (int(cords[7]),int(cords[10]))
+        origin = (int(cords[0]),int(cords[2]))
+        destination = (int(cords[4]),int(cords[6]))
 
         # Validity checks
         if origin == destination:
-            print("origin is destination")
             return False
         if self.game.height < int(destination[0]) < 0:
-            print("map height prob")
             return False
         if self.game.width < int(destination[1]) < 0:
-            print("map width prob")
             return False
         for pos in self.armyPos:
             if destination == pos:
-                print("army already there")
                 return False
 
         # Set challengers number
@@ -427,22 +453,26 @@ class Player():
             pass
         else:
             movePos(self,origin,destination,indexPos,soldier)
-            self.game.printGameState()
+            armyMove[indexPos] = 0
             return True
 
     def move(self,year):
-        print("===Player {}'s Stage: Move Armies===\n".format(self.num))
+        print("===Player {}'s Stage: Move Armies===".format(self.num))
+
+        armyMove = []
+        for i in self.army:
+            armyMove.append(1)
 
         while True:
             invalidResponse = "Invalid move. Try again.\n"
 
             if len(self.army) == 1:
-                print("No Army to Move: next turn\n")
+                print("\nNo Army to Move: next turn.\n")
                 break
             else:
-                self.playerArmyList()
+                self.playerArmyList(armyMove)
 
-            cords = input("\nEnter four integers as a format 'x0 y0 x1 y1' to represent move unit from (x0,y0) to (x1,y1) or 'NO' to end this turn. ")
+            cords = input("\nEnter four integers as a format ‘x0 y0 x1 y1’ to represent move unit from (x0, y0) to (x1, y1) or ‘NO’ to end this turn.\n")
             
             # Alternative options checking
             if cords == "NO":
@@ -458,14 +488,14 @@ class Player():
                 self.game.quit()
             
             # Valid input checking
-            if len(cords) != 11:
+            if len(cords) != 7:
                 print(invalidResponse)
                 continue
-            if not (cords[:1].isalpha and cords[1:2].isnumeric and cords[3:4].isalpha and cords[4:5].isnumeric and cords[6:7].isalpha 
-            and cords[7:8].isnumeric and cords[9:10].isalpha and cords[10:].isnumeric):
+
+            if not (cords[:1].isdigit and cords[2:3].isdigit and cords[4:5].isdigit and cords[6:].isdigit):
                 print(invalidResponse)
                 continue
-            if self.moveResults(cords,year):
+            if self.moveResults(cords,year,armyMove):
                 continue
             else:
                 print(invalidResponse)

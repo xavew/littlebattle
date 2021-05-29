@@ -8,11 +8,10 @@ folder_path = "./invalid_files/"
 
 def test_file_not_found():
   # no need to create a file for FileNotFound
-  pass
+  load_config_file()
 
 def test_format_error():
-  # add "format_error_file.txt" in "invalid_files"
-  pass
+  load_config_file("invalid_files/format_error_file.txt")
 
 def test_frame_format_error():
   # add "frame_format_error_file.txt" in "invalid_files"

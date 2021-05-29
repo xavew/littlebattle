@@ -5,12 +5,17 @@ class Battle:
         self.board = []
         self.width = width
         self.height = height
-        for row in range(height):
+        # for row in range(height):
+        #     list = []
+        #     for column in range(width):
+        #         list.append("  ")
+        #     self.board.append(list)
+        for column in range(width):
             list = []
-            for column in range(width):
+            for row in range(height):
                 list.append("  ")
             self.board.append(list)
-        print("Game Started: Little Battle! (enter QUIT to quit the game)")
+        print("Game Started: Little Battle! (enter QUIT to quit the game)\n")
 
     def setResources(self,list,resource):
         for i in list:
@@ -34,19 +39,18 @@ class Battle:
         y = cords[1]
         input = ""
 
-        if name == "s":
+        if name == "S":
             input = "S{}".format(num)
-        if name == "a":
+        if name == "A":
             input = "A{}".format(num)
-        if name == "k":
+        if name == "K":
             input = "K{}".format(num)
-        if name == "t":
+        if name == "T":
             input = "T{}".format(num)    
         self.board[x][y] = input
 
-
     def printGameState(self):
-        print("\nPlease check the battlefield, commander.")
+        print("Please check the battlefield, commander.")
         
         # Print top line
         map = "  X"
@@ -75,9 +79,7 @@ class Battle:
             map += "---"
         map = map[:-1]
         map += "+"
-
         print(map)
-        print("enter DIS to display the map")
 
     def move(self):
         pass
@@ -86,14 +88,11 @@ class Battle:
         pass
 
     def pris(self):
-        print("""
-Recruit Prices:
+        print("""Recruit Prices:
   Spearman (S) - 1W, 1F
   Archer (A) - 1W, 1G
   Knight (K) - 1F, 1G
-  Scout (T) - 1W, 1F, 1G
-(enter PRIS to display the price list)
-        """)
+  Scout (T) - 1W, 1F, 1G""")
 
     def quit(self):
         exit()
