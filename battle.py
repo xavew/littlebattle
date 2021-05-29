@@ -3,6 +3,8 @@ import sys
 class Battle:
     def __init__(self,width, height):
         self.board = []
+        self.width = width
+        self.height = height
         for row in range(height):
             list = []
             for column in range(width):
@@ -44,44 +46,60 @@ class Battle:
 
 
 
-    def printGameState(self,width,height):
+    def printGameState(self):
         print("\nPlease check the battlefield, commander.")
         
         # Print top line
         map = "  X"
-        for i in range(width):
+        for i in range(self.width):
             map += "0{} ".format(i)
         map = map[:-1]
         map += "X\n"
 
         # Print Y line
         map += " Y+"
-        for i in range(width):
+        for i in range(self.width):
             map += "---"
         map = map[:-1]
         map += "+\n"
 
         # Print each row
-        for i in range(height):
+        for i in range(self.height):
             map += "0{}".format(i)
-            for j in range(width):
+            for j in range(self.width):
                 map += "|{}".format(self.board[j][i])
             map += "|\n"
 
         # Print bottom Y line    
         map += " Y+"
-        for i in range(width):
+        for i in range(self.width):
             map += "---"
         map = map[:-1]
         map += "+"
 
         print(map)
+        print("enter DIS to display the map")
 
     def move(self):
         pass
 
     def check_finished(self):
         pass
+
+    def pris(self):
+        print("""
+Recruit Prices:
+  Spearman (S) - 1W, 1F
+  Archer (A) - 1W, 1G
+  Knight (K) - 1F, 1G
+  Scout (T) - 1W, 1F, 1G
+(enter PRIS to display the price list)
+        """)
+
+    def quit(self):
+        exit()
+
+    
 
 
 
