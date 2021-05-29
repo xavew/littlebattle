@@ -146,20 +146,6 @@ def setCordsMap():
 def checkSurroundsLink(cords):
   game.checkSurrounds(cords)
 
-# def dis():
-#   game.printGameState(5,5)
-#   print("(enter DIS to display the map)")
-
-# def pris():
-#   print("""
-# Recruit Prices:
-#   Spearman (S) - 1W, 1F
-#   Archer (A) - 1W, 1G
-#   Knight (K) - 1F, 1G
-#   Scout (T) - 1W, 1F, 1G
-# (enter PRIS to display the price list)
-#   """)
-
 if __name__ == "__main__":
   if len(sys.argv) != 2:
     print("Usage: python3 little_battle.py <filepath>")

@@ -213,12 +213,207 @@ class Player():
             print(scout[:-1])
 
     def moveResults(self,cords):
-        pass
+        
+        def challenge(self,soldier,indexPos,o,d):
+            # Set destination coordinates
+            ox = int(o[0])
+            oy = int(o[1])
+            dx = int(d[0])
+            dy = int(d[1])
 
+            enemy = self.game.board[dx][dy]
+
+            if enemy[0] == "S":
+                if soldier[0] == "S":
+                    self.game.board[dx][dy] = "  "
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We destroyed the enemy Spearman with massive loss!\n")
+                if soldier[0] == "K":
+                    self.game.board[ox][oy] = "  "
+                    del self.armyPos[indexPos]
+                    del self.army[indexPos]
+                    print("We lost the army Knight due to your command!\n")
+                if soldier[0] == "A":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Spearman!\n")
+                if soldier[0] == "T":
+                    self.game.board[ox][oy] = "  "
+                    del self.armyPos[indexPos]
+                    del self.army[indexPos]
+                    print("We lost the army Scout due to your command!\n")
+            if enemy[0] == "K":
+                if soldier[0] == "S":
+                    self.game.board[ox][oy] = "  "
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Knight!\n")
+                if soldier[0] == "K":
+                    self.game.board[dx][dy] = "  "
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We destroyed the enemy Knight with massive loss!\n")
+                if soldier[0] == "A":
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We lost the army Archer due to your command!\n")
+                if soldier[0] == "T":
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We lost the army Scout due to your command!\n")
+            if enemy[0] == "A":
+                if soldier[0] == "S":
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.army[indexPos]
+                    print("We lost the army Spearman due to your command!\n")
+                if soldier[0] == "K":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Archer!\n")
+                if soldier[0] == "A":
+                    self.game.board[dx][dy] = "  "
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We destroyed the enemy Archer with massive loss!\n")
+                if soldier[0] == "T":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("We lost the army Scout due to your command!\n")
+            if enemy[0] == "T":
+                if soldier[0] == "S":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Scout!\n")
+                if soldier[0] == "K":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Scout!\n")
+                if soldier[0] == "A":
+                    self.game.board[dx][dy] = self.army[indexPos]
+                    self.game.board[ox][oy] = "  "
+                    self.armyPos[indexPos] = d
+                    print("Great! We defeated the enemy Scout!\n")
+                if soldier[0] == "T":
+                    self.game.board[dx][dy] = "  "
+                    self.game.board[ox][oy] = "  "
+                    del self.army[indexPos]
+                    del self.armyPos[indexPos]
+                    print("We destroyed the enemy Scout with massive loss!\n")
+
+        def movePos(self,o,d,indexPos,soldier):
+            # Set destination coordinates
+            ox = int(o[0])
+            oy = int(o[1])
+            dx = int(d[0])
+            dy = int(d[1])
+
+            # Set players soldier name
+            soldierName = ""
+            if soldier[0] == "S":
+                soldierName = "Spearman"
+            elif soldier[0] == "A":
+                soldierName = "Archer"
+            elif soldier[0] == "K":
+                soldierName = "Knight"
+            elif soldier[0] == "T":
+                soldierName = "Scout"
+
+            print("\nYou have moved {} from (x{},y{}) to (x{},y{}).".format(soldierName,ox,oy,dx,dy))
+
+            if self.game.board[dx][dy] == "  ":
+                self.game.board[dx][dy] = self.army[indexPos]
+                self.game.board[ox][oy] = "  "
+                self.armyPos[indexPos] = d
+            if self.game.board[dx][dy] == "~~":
+                self.game.board[ox][oy] = "  "
+                del self.armyPos[indexPos]
+                del self.army[indexPos]
+                print("\nWe lost the army {} due to your command!".format(soldierName))
+            if self.game.board[dx][dy] == "WW":
+                self.inv[0] += 2
+                self.game.board[ox][oy] = "  "
+                self.game.board[dx][dy] = self.army[indexPos]
+                self.armyPos[indexPos] = d
+                print("\nGood. We collected 2 Wood.")
+            if self.game.board[dx][dy] == "FF":
+                self.inv[1] += 2
+                self.game.board[ox][oy] = "  "
+                self.game.board[dx][dy] = self.army[indexPos]
+                self.armyPos[indexPos] = d
+                print("\nGood. We collected 2 Food.")
+            if self.game.board[dx][dy] == "GG":
+                self.inv[2] += 2
+                self.game.board[ox][oy] = "  "
+                self.game.board[dx][dy] = self.army[indexPos]
+                self.armyPos[indexPos] = d
+                print("\nGood. We collected 2 Gold.")
+            if self.game.board[dx][dy] == "S{}".format(otherPlayer):
+                challenge(soldier,indexPos,o,d)
+            if self.game.board[dx][dy] == "A{}".format(otherPlayer):
+                challenge(soldier,indexPos,o,d)
+            if self.game.board[dx][dy] == "K{}".format(otherPlayer):
+                challenge(soldier,indexPos,o,d)
+            if self.game.board[dx][dy] == "T{}".format(otherPlayer):
+                challenge(soldier,indexPos,o,d)
+
+        # Set coordinates
+        origin = (int(cords[1]),int(cords[4]))
+        destination = (int(cords[7]),int(cords[10]))
+
+        # Validity checks
+        if origin == destination:
+            print("origin is destination")
+            return False
+        if self.game.height < int(destination[0]) < 0:
+            print("map height prob")
+            return False
+        if self.game.width < int(destination[1]) < 0:
+            print("map width prob")
+            return False
+        for pos in self.armyPos:
+            if destination == pos:
+                print("army already there")
+                return False
+
+        # Set challengers number
+        otherPlayer = 0
+        if self.num == 1:
+            otherPlayer = 2
+        else:
+            otherPlayer = 1
+
+        # Get index value of soldier player wants to move
+        index = 0
+        indexPos = 0
+
+        for i in self.armyPos:
+            if i == origin:
+                indexPos = index
+            index += 1
+        soldier = self.army[indexPos]
+
+        # Call respective move function for specific soldier type
+        if soldier == "T{}".format(self.num):
+            pass
+        else:
+            movePos(self,origin,destination,indexPos,soldier)
+            self.game.printGameState()
+            return True
 
     def move(self):
         print("===Player {}'s Stage: Move Armies===\n".format(self.num))
-
         while True:
             invalidResponse = "Invalid blah\n"
 
@@ -251,9 +446,12 @@ class Player():
             and cords[7:8].isnumeric and cords[9:10].isalpha and cords[10:].isnumeric):
                 print(invalidResponse)
                 continue
+            if self.moveResults(cords):
+                break
+            else:
+                print(invalidResponse)
+                continue
             
-            self.moveResults(cords)
-            break
 
             
 

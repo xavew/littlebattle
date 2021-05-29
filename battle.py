@@ -45,7 +45,6 @@ class Battle:
         self.board[x][y] = input
 
 
-
     def printGameState(self):
         print("\nPlease check the battlefield, commander.")
         
