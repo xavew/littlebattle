@@ -242,7 +242,11 @@ class Player():
                 if armyMove[index] == 1:
                     scout += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
-                
+
+        if spearman == "  Spearman: " and archer == "  Archer: " and knight == "  Knight: " and scout == "  Scout: ":
+            print("BALLSAK ")
+            return False
+
         print("\nArmies to Move:")
         if spearman != "  Spearman: ":
             print(spearman[:-1])
@@ -252,6 +256,7 @@ class Player():
             print(knight[:-1])
         if scout != "  Scout: ":
             print(scout[:-1])
+        return True
 
     def moveResults(self,cords,year,armyMove):
         
@@ -523,7 +528,8 @@ class Player():
                 print("\nNo Army to Move: next turn.\n")
                 break
             else:
-                self.playerArmyList(armyMove)
+                if not self.playerArmyList(armyMove):
+                    break
 
             cords = input("\nEnter four integers as a format ‘x0 y0 x1 y1’ to represent move unit from (x0, y0) to (x1, y1) or ‘NO’ to end this turn.\n")
             
