@@ -357,6 +357,7 @@ class Player():
             print("The armys {} captured the enemy's capital.\n".format(soldierName))
             name = input("What's your name, commander? ")
             print("\n***Congratulations! Emperor {} unified the country in {}.***".format(name,year))
+            quit()
             
         def movePos(self,o,d,indexPos,soldier):
             # Set destination coordinates
@@ -448,10 +449,62 @@ class Player():
             index += 1
         soldier = self.army[indexPos]
 
+        # origin (x,y) destination (x,y)
+        
         # Call respective move function for specific soldier type
-        if soldier == "T{}".format(self.num):
-            pass
+        if soldier[0] == "T":
+            if origin[0] != destination[0]: # Means moving on X axis
+                if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1) and (origin[0] - destination[0] != -2) and (origin[0] - destination[0] != 2):
+                    return False # Neither one or two steps
+                else:
+                    if origin[0] - destination[0] == 2: # Moving left two steps
+                        firstStep = (destination[0] + 1,destination[1])
+                        movePos(self,origin,firstStep,indexPos,soldier)
+                        origin = firstStep
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True
+                    elif origin[0] - destination[0] == -2:
+                        firstStep = (destination[0] - 1,destination[1])
+                        movePos(self,origin,firstStep,indexPos,soldier)
+                        origin = firstStep
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True
+                    else:
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True                 
+            else: # Moving on Y axis
+                if (origin[1] - destination[1] != 1) and (origin[1] - destination[1] != -1) and (origin[1] - destination[1] != -2) and (origin[1] - destination[1] != 2):
+                    return False
+                else:
+                    if origin[1] - destination[1] == 2: # Moving left two steps
+                        firstStep = (destination[0],destination[1] + 1)
+                        movePos(self,origin,firstStep,indexPos,soldier)
+                        origin = firstStep
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True
+                    elif origin[1] - destination[1] == -2:
+                        firstStep = (destination[0],destination[1]-1)
+                        movePos(self,origin,firstStep,indexPos,soldier)
+                        origin = firstStep
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True
+                    else:
+                        movePos(self,origin,destination,indexPos,soldier)
+                        armyMove[indexPos] = 0
+                        return True  
         else:
+            if origin[0] != destination[0]:
+                if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1):
+                    return False
+            else:
+                if (origin[1] - destination[1] != 1) and (origin[1] - destination[1] != -1):
+                    return False
+
             movePos(self,origin,destination,indexPos,soldier)
             armyMove[indexPos] = 0
             return True
