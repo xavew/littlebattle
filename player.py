@@ -158,8 +158,6 @@ class Player():
                 if userRecruit == "NO":
                     break
 
-                
-
                 while True:
                     userRecruitPosition = input("\nYou want to recruit a {}. Enter two integers as format ‘x y’ to place your army.\n".format(userRecruitName))
                     
@@ -225,26 +223,29 @@ class Player():
         for i in self.army:
             if i == "H{}".format(n):
                 index += 1
-                continue
             elif i == "S{}".format(n):
-                if armyMove[index] == 1:
+                if armyMove[index] > 0:
                     spearman += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "A{}".format(n):
-                if armyMove[index] == 1:
+                if armyMove[index] > 0:
                     archer += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "K{}".format(n):
-                if armyMove[index] == 1:
+                if armyMove[index] > 0:
                     knight += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "T{}".format(n):
-                if armyMove[index] == 1:
+                if armyMove[index] > 0:
                     scout += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
 
-        if spearman == "  Spearman: " and archer == "  Archer: " and knight == "  Knight: " and scout == "  Scout: ":
-            print("BALLSAK ")
+        sum = 0
+        for i in armyMove:
+            sum += i
+        sum -= 1
+
+        if sum == 0:
             return False
 
         print("\nArmies to Move:")
@@ -411,7 +412,7 @@ class Player():
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
                 print("Good. We collected 2 Gold.")
-            if self.game.board[dx][dy][0] == "H":
+            if self.game.board[dx][dy] == "H{}".format(otherPlayer):
                 gameWin(soldierName)
             if self.game.board[dx][dy] == "S{}".format(otherPlayer):
                 challenge(soldier,indexPos,o,d)
@@ -453,55 +454,52 @@ class Player():
                 indexPos = index
             index += 1
         soldier = self.army[indexPos]
-
-        # origin (x,y) destination (x,y)
         
+        
+
         # Call respective move function for specific soldier type
         if soldier[0] == "T":
             if origin[0] != destination[0]: # Means moving on X axis
                 if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1) and (origin[0] - destination[0] != -2) and (origin[0] - destination[0] != 2):
                     return False # Neither one or two steps
                 else:
+                    armyMove[indexPos] -= 1
                     if origin[0] - destination[0] == 2: # Moving left two steps
                         firstStep = (destination[0] + 1,destination[1])
                         movePos(self,origin,firstStep,indexPos,soldier)
                         origin = firstStep
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True
                     elif origin[0] - destination[0] == -2:
                         firstStep = (destination[0] - 1,destination[1])
                         movePos(self,origin,firstStep,indexPos,soldier)
                         origin = firstStep
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True
                     else:
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True                 
             else: # Moving on Y axis
                 if (origin[1] - destination[1] != 1) and (origin[1] - destination[1] != -1) and (origin[1] - destination[1] != -2) and (origin[1] - destination[1] != 2):
                     return False
                 else:
+                    armyMove[indexPos] -= 1
                     if origin[1] - destination[1] == 2: # Moving left two steps
                         firstStep = (destination[0],destination[1] + 1)
                         movePos(self,origin,firstStep,indexPos,soldier)
                         origin = firstStep
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True
                     elif origin[1] - destination[1] == -2:
                         firstStep = (destination[0],destination[1]-1)
                         movePos(self,origin,firstStep,indexPos,soldier)
                         origin = firstStep
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True
                     else:
                         movePos(self,origin,destination,indexPos,soldier)
-                        armyMove[indexPos] = 0
                         return True  
+            
         else:
             if origin[0] != destination[0]:
                 if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1):
@@ -511,14 +509,14 @@ class Player():
                     return False
 
             movePos(self,origin,destination,indexPos,soldier)
-            armyMove[indexPos] = 0
+            armyMove[indexPos] -= 1
             return True
 
     def move(self,year):
         print("===Player {}'s Stage: Move Armies===".format(self.num))
 
         armyMove = []
-        for i in self.army:
+        for i in self.army:         
             armyMove.append(1)
 
         while True:

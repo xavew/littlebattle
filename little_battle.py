@@ -12,6 +12,15 @@ def load_config_file(filepath):
   file = open("config.txt", "r")
   content = file.readlines()
 
+  frameText = content[0].strip("\n").replace(" ","").split(":")[1]
+  if frameText[0:1].isdigit() == False or frameText[1:2] != "x" or frameText[2:3].isdigit() == False:
+    raise SyntaxError("Invalid Configuration File: frame should be in format widthxheight!")
+  if 7 < int(frameText[0]) or int(frameText[0]) < 5 or 7 < int(frameText[2]) or int(frameText[2]) < 5 :
+    raise ArithmeticError(" Invalid Configuration File: width and height should range from 5 to 7!")
+
+  width = int(frameText[0:1])
+  height = int(frameText[2:3])
+
   def checkInitialFormat():
     flag = False
     if content[0].split(" ")[0] != "Frame:":
@@ -26,9 +35,6 @@ def load_config_file(filepath):
       flag = True
     if flag == True:
       raise SyntaxError("Invalid Configuration File: format error!")
-
-  #def checkFrameContent():
-    
 
   # Function used to check if a resource coordinate is already in use
   def checkExists(cords):
@@ -118,15 +124,6 @@ def load_config_file(filepath):
       else:
         break
 
-  frameText = content[0].split(" ")[1]
-  if frameText[0:1].isdigit() == False or frameText[1:2] != "x" or frameText[2:3].isdigit() == False:
-    raise SyntaxError("Invalid Configuration File: frame should be in format widthxheight!")
-  if 7 < int(frameText[0:1]) < 5 or 7 < int(frameText[2:3]) < 5:
-    raise ArithmeticError(" Invalid Configuration File: width and height should range from 5 to 7!")
-
-  width = int(frameText[0:1])
-  height = int(frameText[2:3])
-
   checkInitialFormat()
   setCords()
 
@@ -142,58 +139,43 @@ def setCordsMap():
 def checkSurroundsLink(cords):
   game.checkSurrounds(cords)
 
-if __name__ == "__main__":
-  if len(sys.argv) != 2:
-    print("Usage: python3 little_battle.py <filepath>")
-    sys.exit()
-  width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
+try:
+  if __name__ == "__main__":
+    if len(sys.argv) != 2:
+      print("Usage: python3 little_battle.py <filepath>")
+      sys.exit()
+    width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
 
-  # Initialise battlefield map and players
-  game = Battle(width,height)
-  player1 = Player(1, game)
-  player2 = Player(2, game)
-  year = 617
+    # Initialise battlefield map and players
+    game = Battle(width,height)
+    player1 = Player(1, game)
+    player2 = Player(2, game)
+    year = 617
 
-  player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
-  player2.setBase(5,5)
+    player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
+    player2.setBase(5,5)
 
-  # Set cordinates and display infomation for player
-  setCordsMap()
-  game.printGameState()
-  print("(enter DIS to display the map)\n")
-  game.pris()
-  print("(enter PRIS to display the price list)\n")
-  currentPlayer = player1
-  player = 1
+    # Set cordinates and display infomation for player
+    setCordsMap()
+    game.printGameState()
+    print("(enter DIS to display the map)\n")
+    game.pris()
+    print("(enter PRIS to display the price list)\n")
+    currentPlayer = player1
+    playerList = []
+    playerList.append(player1)
+    playerList.append(player2)
 
-  while player != 0:
-    print("-Year {}-\n".format(year))
+    while True:
+      print("-Year {}-\n".format(year))
 
-    currentPlayer.recruit()
-    currentPlayer.move(year)
+      for player in playerList:
+        player.recruit()
+        player.move(year)
 
-    if player == 1:
-      currentPlayer == player2
-      player = 2
-    elif player == 2:
-      currentPlayer == player1
-      player = 1
       year += 1
-
-  currentPlayer = player1
-
-  while player != 0:
-    print("-Year {}-\n".format(year))
-
-    currentPlayer.recruit()
-    currentPlayer.move(year)
-
-    if currentPlayer == player1:
-      currentPlayer = player2
-    else:
-      currentPlayer = player1
-      year += 1
-
+except:
+  print("Error occured".format(sys.exc_info))
 
   
   
