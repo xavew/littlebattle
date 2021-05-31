@@ -110,7 +110,8 @@ class Player():
             else:
                 return False
 
-    def recruit(self):
+    def recruit(self,year):
+        print("-Year {}-\n".format(year))
         print("+++Player {}'s Stage: Recruit Armies+++".format(self.num))
 
         while True:
@@ -132,6 +133,7 @@ class Player():
                     elif userRecruit == "QUIT":
                         self.game.quit()
                     elif userRecruit == "NO":
+                        print()
                         break
 
                     
@@ -214,10 +216,10 @@ class Player():
 
     def playerArmyList(self,armyMove):
         n = self.num
-        spearman = "  Spearman: "
-        archer = "  Archer: "
-        knight = "  Knight: "
-        scout = "  Scout: "
+        spearman = "  Spearman:"
+        archer = "  Archer:"
+        knight = "  Knight:"
+        scout = "  Scout:"
         index = 0
 
         for i in self.army:
@@ -225,20 +227,22 @@ class Player():
                 index += 1
             elif i == "S{}".format(n):
                 if armyMove[index] > 0:
-                    spearman += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    spearman += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "A{}".format(n):
                 if armyMove[index] > 0:
-                    archer += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    archer += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "K{}".format(n):
                 if armyMove[index] > 0:
-                    knight += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    knight += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
             elif i == "T{}".format(n):
                 if armyMove[index] > 0:
-                    scout += "({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
+                    scout += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
                     index += 1
+            else:
+                index += 1
 
         sum = 0
         for i in armyMove:
@@ -246,16 +250,17 @@ class Player():
         sum -= 1
 
         if sum == 0:
+            print("No Army to Move: next turn.\n")
             return False
 
         print("Armies to Move:")
-        if spearman != "  Spearman: ":
+        if spearman != "  Spearman:":
             print(spearman[:-1])
-        if archer != "  Archer: ":
+        if archer != "  Archer:":
             print(archer[:-1])
-        if knight != "  Knight: ":
+        if knight != "  Knight:":
             print(knight[:-1])
-        if scout != "  Scout: ":
+        if scout != "  Scout:":
             print(scout[:-1])
         return True
 
@@ -270,6 +275,7 @@ class Player():
                     enemyIndex += 1
             del enemyPlayer.army[enemyIndex]
             del enemyPlayer.armyPos[enemyIndex]
+            del enemyPlayer.armyMove[enemyIndex]
 
 
         def challenge(soldier,indexPos,o,d,enemyPlayer):
@@ -287,12 +293,14 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Spearman with massive loss!\n")
                 if soldier[0] == "K":
                     self.game.board[ox][oy] = "  "
                     del self.armyPos[indexPos]
                     del self.army[indexPos]
+                    del armyMove[indexPos]
                     print("We lost the army Knight due to your command!\n")
                 if soldier[0] == "A":
                     self.game.board[dx][dy] = self.army[indexPos]
@@ -304,6 +312,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.armyPos[indexPos]
                     del self.army[indexPos]
+                    del armyMove[indexPos]
                     print("We lost the army Scout due to your command!\n")
             if enemy[0] == "K":
                 if soldier[0] == "S":
@@ -317,23 +326,27 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Knight with massive loss!\n")
                 if soldier[0] == "A":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     print("We lost the army Archer due to your command!\n")
                 if soldier[0] == "T":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     print("We lost the army Scout due to your command!\n")
             if enemy[0] == "A":
                 if soldier[0] == "S":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.army[indexPos]
+                    del armyMove[indexPos]
                     print("We lost the army Spearman due to your command!\n")
                 if soldier[0] == "K":
                     self.game.board[dx][dy] = self.army[indexPos]
@@ -346,6 +359,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Archer with massive loss!\n")
                 if soldier[0] == "T":
@@ -377,13 +391,14 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    del armyMove[indexPos]
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Scout with massive loss!\n")
 
         def gameWin(soldierName):
-            print("The armys {} captured the enemy's capital.\n".format(soldierName))
-            name = input("What's your name, commander? ")
-            print("\n***Congratulations! Emperor {} unified the country in {}.***".format(name,year))
+            print("The army {} captured the enemy's capital.\n".format(soldierName))
+            name = input("What’s your name, commander?\n")
+            print("***Congratulation! Emperor {} unified the country in {}.***".format(name,year))
             quit()
             
         def movePos(self,o,d,indexPos,soldier,soldierName):
@@ -535,13 +550,8 @@ class Player():
 
         while True:
             invalidResponse = "Invalid move. Try again.\n"
-
-            if len(self.army) == 1:
-                print("\nNo Army to Move: next turn.\n")
+            if not self.playerArmyList(armyMove):
                 break
-            else:
-                if not self.playerArmyList(armyMove):
-                    break
 
             cords = input("\nEnter four integers as a format ‘x0 y0 x1 y1’ to represent move unit from (x0, y0) to (x1, y1) or ‘NO’ to end this turn.\n")
             
@@ -551,6 +561,7 @@ class Player():
                 break
             elif cords == "DIS":
                 self.game.printGameState()
+                print()
                 continue
             elif cords == "PRIS":
                 self.game.pris()
@@ -567,7 +578,7 @@ class Player():
                 print(invalidResponse)
                 continue
             if self.moveResults(cords,year,armyMove,enemyPlayer):
-                print("meant to be here?")
+                print()
                 continue
             else:
                 print(invalidResponse)

@@ -168,10 +168,8 @@ if __name__ == "__main__":
   playerList.append(player2)
 
   while True:
-    print("-Year {}-\n".format(year))
-
     for player in playerList:
-      player.recruit()
+      player.recruit(year)
       player.move(year,playerList)
 
     year += 1
