@@ -248,7 +248,7 @@ class Player():
         if sum == 0:
             return False
 
-        print("\nArmies to Move:")
+        print("Armies to Move:")
         if spearman != "  Spearman: ":
             print(spearman[:-1])
         if archer != "  Archer: ":
@@ -259,9 +259,20 @@ class Player():
             print(scout[:-1])
         return True
 
-    def moveResults(self,cords,year,armyMove):
-        
-        def challenge(self,soldier,indexPos,o,d):
+    def moveResults(self,cords,year,armyMove,enemyPlayer):
+
+        def delEnemyIndex(enemyPlayer,dx,dy):
+            enemyIndex = 0
+            for i in enemyPlayer.armyPos:
+                if i[0] == dx and i[1] == dy:
+                    break
+                else:
+                    enemyIndex += 1
+            del enemyPlayer.army[enemyIndex]
+            del enemyPlayer.armyPos[enemyIndex]
+
+
+        def challenge(soldier,indexPos,o,d,enemyPlayer):
             # Set destination coordinates
             ox = int(o[0])
             oy = int(o[1])
@@ -276,6 +287,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Spearman with massive loss!\n")
                 if soldier[0] == "K":
                     self.game.board[ox][oy] = "  "
@@ -286,6 +298,7 @@ class Player():
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.game.board[ox][oy] = "  "
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Spearman!\n")
                 if soldier[0] == "T":
                     self.game.board[ox][oy] = "  "
@@ -297,12 +310,14 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Knight!\n")
                 if soldier[0] == "K":
                     self.game.board[dx][dy] = "  "
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Knight with massive loss!\n")
                 if soldier[0] == "A":
                     self.game.board[ox][oy] = "  "
@@ -324,12 +339,14 @@ class Player():
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.game.board[ox][oy] = "  "
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Archer!\n")
                 if soldier[0] == "A":
                     self.game.board[dx][dy] = "  "
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Archer with massive loss!\n")
                 if soldier[0] == "T":
                     self.game.board[dx][dy] = self.army[indexPos]
@@ -341,22 +358,26 @@ class Player():
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.game.board[ox][oy] = "  "
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Scout!\n")
                 if soldier[0] == "K":
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.game.board[ox][oy] = "  "
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Scout!\n")
                 if soldier[0] == "A":
                     self.game.board[dx][dy] = self.army[indexPos]
                     self.game.board[ox][oy] = "  "
                     self.armyPos[indexPos] = d
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("Great! We defeated the enemy Scout!\n")
                 if soldier[0] == "T":
                     self.game.board[dx][dy] = "  "
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
+                    delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Scout with massive loss!\n")
 
         def gameWin(soldierName):
@@ -365,63 +386,44 @@ class Player():
             print("\n***Congratulations! Emperor {} unified the country in {}.***".format(name,year))
             quit()
             
-        def movePos(self,o,d,indexPos,soldier):
+        def movePos(self,o,d,indexPos,soldier,soldierName):
             # Set destination coordinates
             ox = int(o[0])
             oy = int(o[1])
             dx = int(d[0])
             dy = int(d[1])
 
-            # Set players soldier name
-            soldierName = ""
-            if soldier[0] == "S":
-                soldierName = "Spearman"
-            elif soldier[0] == "A":
-                soldierName = "Archer"
-            elif soldier[0] == "K":
-                soldierName = "Knight"
-            elif soldier[0] == "T":
-                soldierName = "Scout"
-
-            print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,ox,oy,dx,dy))
-
             if self.game.board[dx][dy] == "  ":
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.game.board[ox][oy] = "  "
                 self.armyPos[indexPos] = d
-            if self.game.board[dx][dy] == "~~":
+            elif self.game.board[dx][dy] == "~~":
                 self.game.board[ox][oy] = "  "
                 del self.armyPos[indexPos]
                 del self.army[indexPos]
                 print("We lost the army {} due to your command!".format(soldierName))
-            if self.game.board[dx][dy] == "WW":
+            elif self.game.board[dx][dy] == "WW":
                 self.inv[0] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
                 print("Good. We collected 2 Wood.")
-            if self.game.board[dx][dy] == "FF":
+            elif self.game.board[dx][dy] == "FF":
                 self.inv[1] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
                 print("Good. We collected 2 Food.")
-            if self.game.board[dx][dy] == "GG":
+            elif self.game.board[dx][dy] == "GG":
                 self.inv[2] += 2
                 self.game.board[ox][oy] = "  "
                 self.game.board[dx][dy] = self.army[indexPos]
                 self.armyPos[indexPos] = d
                 print("Good. We collected 2 Gold.")
-            if self.game.board[dx][dy] == "H{}".format(otherPlayer):
+            elif self.game.board[dx][dy][0:1] == "H" and  self.game.board[dx][dy] != f"H{self.num}":
                 gameWin(soldierName)
-            if self.game.board[dx][dy] == "S{}".format(otherPlayer):
-                challenge(soldier,indexPos,o,d)
-            if self.game.board[dx][dy] == "A{}".format(otherPlayer):
-                challenge(soldier,indexPos,o,d)
-            if self.game.board[dx][dy] == "K{}".format(otherPlayer):
-                challenge(soldier,indexPos,o,d)
-            if self.game.board[dx][dy] == "T{}".format(otherPlayer):
-                challenge(soldier,indexPos,o,d)
+            elif self.game.board[dx][dy][1:2] != self.num:
+                challenge(soldier,indexPos,o,d,enemyPlayer)
 
         # Set coordinates
         origin = (int(cords[0]),int(cords[2]))
@@ -437,13 +439,8 @@ class Player():
         for pos in self.armyPos:
             if destination == pos:
                 return False
-
-        # Set challengers number
-        otherPlayer = 0
-        if self.num == 1:
-            otherPlayer = 2
-        else:
-            otherPlayer = 1
+        if (abs(origin[0]-destination[0]) > 0 ) and (abs(origin[1]-destination[1]) > 0 ) :
+            return False
 
         # Get index value of soldier player wants to move
         index = 0
@@ -454,50 +451,61 @@ class Player():
                 indexPos = index
             index += 1
         soldier = self.army[indexPos]
-        
-        
 
+        # Set players soldier name
+        soldierName = ""
+        if soldier[0] == "S":
+            soldierName = "Spearman"
+        elif soldier[0] == "A":
+            soldierName = "Archer"
+        elif soldier[0] == "K":
+            soldierName = "Knight"
+        elif soldier[0] == "T":
+            soldierName = "Scout"
+        
         # Call respective move function for specific soldier type
         if soldier[0] == "T":
             if origin[0] != destination[0]: # Means moving on X axis
                 if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1) and (origin[0] - destination[0] != -2) and (origin[0] - destination[0] != 2):
                     return False # Neither one or two steps
                 else:
+                    print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
                     armyMove[indexPos] -= 1
                     if origin[0] - destination[0] == 2: # Moving left two steps
                         firstStep = (destination[0] + 1,destination[1])
-                        movePos(self,origin,firstStep,indexPos,soldier)
+                        movePos(self,origin,firstStep,indexPos,soldier,soldierName)
                         origin = firstStep
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True
                     elif origin[0] - destination[0] == -2:
                         firstStep = (destination[0] - 1,destination[1])
-                        movePos(self,origin,firstStep,indexPos,soldier)
+                        movePos(self,origin,firstStep,indexPos,soldier,soldierName)
                         origin = firstStep
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True
                     else:
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True                 
             else: # Moving on Y axis
                 if (origin[1] - destination[1] != 1) and (origin[1] - destination[1] != -1) and (origin[1] - destination[1] != -2) and (origin[1] - destination[1] != 2):
                     return False
                 else:
+                    print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
                     armyMove[indexPos] -= 1
                     if origin[1] - destination[1] == 2: # Moving left two steps
                         firstStep = (destination[0],destination[1] + 1)
-                        movePos(self,origin,firstStep,indexPos,soldier)
+                        movePos(self,origin,firstStep,indexPos,soldier,soldierName)
                         origin = firstStep
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True
                     elif origin[1] - destination[1] == -2:
                         firstStep = (destination[0],destination[1]-1)
-                        movePos(self,origin,firstStep,indexPos,soldier)
+                        movePos(self,origin,firstStep,indexPos,soldier,soldierName)
                         origin = firstStep
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True
                     else:
-                        movePos(self,origin,destination,indexPos,soldier)
+                        movePos(self,origin,destination,indexPos,soldier,soldierName)
                         return True  
             
         else:
@@ -507,13 +515,19 @@ class Player():
             else:
                 if (origin[1] - destination[1] != 1) and (origin[1] - destination[1] != -1):
                     return False
-
-            movePos(self,origin,destination,indexPos,soldier)
+            print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
+            movePos(self,origin,destination,indexPos,soldier,soldierName)
             armyMove[indexPos] -= 1
             return True
 
-    def move(self,year):
-        print("===Player {}'s Stage: Move Armies===".format(self.num))
+    def move(self,year,playerList):
+        print("===Player {}'s Stage: Move Armies===\n".format(self.num))
+
+        # Setting enemy player
+        if self.num == playerList[0].num:
+            enemyPlayer = playerList[1]
+        else:
+            enemyPlayer = playerList[0]
 
         armyMove = []
         for i in self.army:         
@@ -552,7 +566,8 @@ class Player():
             if not (cords[:1].isdigit and cords[2:3].isdigit and cords[4:5].isdigit and cords[6:].isdigit):
                 print(invalidResponse)
                 continue
-            if self.moveResults(cords,year,armyMove):
+            if self.moveResults(cords,year,armyMove,enemyPlayer):
+                print("meant to be here?")
                 continue
             else:
                 print(invalidResponse)

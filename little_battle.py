@@ -4,14 +4,13 @@ from player import Player
 
 # Please implement this function according to Section "Read Configuration File"
 def load_config_file(filepath):
-  # It should return width, height, waters, woods, foods, golds based on the file
-  # Complete the test driver of this function in file_loading_test.py
   width, height = 0, 0
   waters, woods, foods, golds = [], [], [], [] # list of position tuples
 
-  file = open("config.txt", "r")
+  file = open("config.txt", "r") 
   content = file.readlines()
 
+  # File frame validity checking
   frameText = content[0].strip("\n").replace(" ","").split(":")[1]
   if frameText[0:1].isdigit() == False or frameText[1:2] != "x" or frameText[2:3].isdigit() == False:
     raise SyntaxError("Invalid Configuration File: frame should be in format widthxheight!")
@@ -36,7 +35,7 @@ def load_config_file(filepath):
     if flag == True:
       raise SyntaxError("Invalid Configuration File: format error!")
 
-  # Function used to check if a resource coordinate is already in use
+  # Checks if a resource coordinate is already in use
   def checkExists(cords):
     if cords in waters:
       return True
@@ -48,6 +47,7 @@ def load_config_file(filepath):
       return True
     else:
       return False
+  # Checks if positions are valid as per spec sheet
   def checkValid(cords):
     if cords == (1,1):
       return True
@@ -71,6 +71,7 @@ def load_config_file(filepath):
       return True
     else:
       return False
+  # Checks if resource cords are within the map coordinates
   def checkOutOfMap(cords):
     if width < cords[0] < 0:
       return True
@@ -139,43 +140,42 @@ def setCordsMap():
 def checkSurroundsLink(cords):
   game.checkSurrounds(cords)
 
-try:
-  if __name__ == "__main__":
-    if len(sys.argv) != 2:
-      print("Usage: python3 little_battle.py <filepath>")
-      sys.exit()
-    width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
 
-    # Initialise battlefield map and players
-    game = Battle(width,height)
-    player1 = Player(1, game)
-    player2 = Player(2, game)
-    year = 617
+if __name__ == "__main__":
+  if len(sys.argv) != 2:
+    print("Usage: python3 little_battle.py <filepath>")
+    sys.exit()
+  width, height, waters, woods, foods, golds = load_config_file(sys.argv[1])
 
-    player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
-    player2.setBase(5,5)
+  # Initialise battlefield map and players
+  game = Battle(width,height)
+  player1 = Player(1, game)
+  player2 = Player(2, game)
+  year = 617
 
-    # Set cordinates and display infomation for player
-    setCordsMap()
-    game.printGameState()
-    print("(enter DIS to display the map)\n")
-    game.pris()
-    print("(enter PRIS to display the price list)\n")
-    currentPlayer = player1
-    playerList = []
-    playerList.append(player1)
-    playerList.append(player2)
+  player1.setBase(5,5) # CHANGE WIDTH AND HEIGHT
+  player2.setBase(5,5)
 
-    while True:
-      print("-Year {}-\n".format(year))
+  # Set cordinates and display infomation for player
+  setCordsMap()
+  game.printGameState()
+  print("(enter DIS to display the map)\n")
+  game.pris()
+  print("(enter PRIS to display the price list)\n")
 
-      for player in playerList:
-        player.recruit()
-        player.move(year)
+  playerList = []
+  playerList.append(player1)
+  playerList.append(player2)
 
-      year += 1
-except:
-  print("Error occured".format(sys.exc_info))
+  while True:
+    print("-Year {}-\n".format(year))
+
+    for player in playerList:
+      player.recruit()
+      player.move(year,playerList)
+
+    year += 1
+
 
   
   
