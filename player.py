@@ -215,7 +215,7 @@ class Player():
             else:
                 break
 
-    def playerArmyList(self):
+    def playerArmyList(self,noSoldiers):
         n = self.num
         spearman = "  Spearman:"
         archer = "  Archer:"
@@ -223,38 +223,60 @@ class Player():
         scout = "  Scout:"
         index = 0
 
+        ##############
+        print(self.army)
         for i in self.army:
-            if i == "H{}".format(n):
-                index += 1
-            elif i == "S{}".format(n):
-                if self.armyMove[index] > 0:
+            print("In here!")
+            if i[0] == "H":
+                pass
+                #index += 1
+            elif i[0] == "S":
+                print("in spearman!")
+                print(self.armyPos)
+                print(index)
+                print(self.armyMove)
+                if self.armyPos[index] not in self.armyMove:
                     spearman += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
-            elif i == "A{}".format(n):
-                if self.armyMove[index] > 0:
+                    print(self.armyPos[index])
+                    print(self.army[index])
+                    #index += 1    
+            elif i[0] == "A":
+                print("in archer!")
+                if self.armyPos[index] not in self.armyMove:
                     archer += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
-            elif i == "K{}".format(n):
-                if self.armyMove[index] > 0:
+                    print(self.armyPos[index])
+                    print(self.army[index])
+                    #index += 1
+                    
+            elif i[0] == "K":
+                if self.armyPos[index] not in self.armyMove:
                     knight += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
-            elif i == "T{}".format(n):
-                if self.armyMove[index] > 0:
+                    print(self.armyPos[index])
+                    print(self.army[index])
+                    #index += 1
+                    
+            elif i[0] == "T":
+                if self.armyPos[index] not in self.armyMove:
                     scout += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
-            else:
-                index += 1
+                    print(self.armyPos[index])
+                    print(self.army[index])
+                    #index += 1
+            index += 1       
+                
 
-        sum = 0
-        for i in self.armyMove:
-            sum += i
-        sum -= 1
+        # print("================")
+        # print(self.armyMove)
+        # print(len(self.armyMove))
+        # print(self.army)
+        # print(len(self.army))
+        # print("================")
+        
 
-        print("====PLAYERARMYLIST()=====")
-        print(self.armyMove)
-        print(sum)
+        # print(self.armyMove)
+        # print(len(self.armyMove))
+        # print(noSoldiers)
 
-        if sum == 0:
+        if len(self.armyMove) == noSoldiers:
             print("No Army to Move: next turn.\n")
             return False
 
@@ -280,9 +302,7 @@ class Player():
                     enemyIndex += 1
             del enemyPlayer.army[enemyIndex]
             del enemyPlayer.armyPos[enemyIndex]
-            del enemyPlayer.armyMove[enemyIndex]
-
-
+            
         def challenge(soldier,indexPos,o,d,enemyPlayer):
             # Set destination coordinates
             ox = int(o[0])
@@ -291,8 +311,6 @@ class Player():
             dy = int(d[1])
 
             enemy = self.game.board[dx][dy]
-            print("IN CHALLENGE!")
-            print(self.armyMove)
 
             if enemy[0] == "S":
                 if soldier[0] == "S":
@@ -300,14 +318,14 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Spearman with massive loss!\n")
                 if soldier[0] == "K":
                     self.game.board[ox][oy] = "  "
                     del self.armyPos[indexPos]
                     del self.army[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     print("We lost the army Knight due to your command!\n")
                 if soldier[0] == "A":
                     self.game.board[dx][dy] = self.army[indexPos]
@@ -319,7 +337,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.armyPos[indexPos]
                     del self.army[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     print("We lost the army Scout due to your command!\n")
             if enemy[0] == "K":
                 if soldier[0] == "S":
@@ -333,27 +351,27 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Knight with massive loss!\n")
                 if soldier[0] == "A":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     print("We lost the army Archer due to your command!\n")
                 if soldier[0] == "T":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     print("We lost the army Scout due to your command!\n")
             if enemy[0] == "A":
                 if soldier[0] == "S":
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.army[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     print("We lost the army Spearman due to your command!\n")
                 if soldier[0] == "K":
                     self.game.board[dx][dy] = self.army[indexPos]
@@ -366,7 +384,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Archer with massive loss!\n")
                 if soldier[0] == "T":
@@ -398,7 +416,7 @@ class Player():
                     self.game.board[ox][oy] = "  "
                     del self.army[indexPos]
                     del self.armyPos[indexPos]
-                    del self.armyMove[indexPos]
+                    
                     delEnemyIndex(enemyPlayer,dx,dy)
                     print("We destroyed the enemy Scout with massive loss!\n")
 
@@ -423,7 +441,6 @@ class Player():
                 self.game.board[ox][oy] = "  "
                 del self.armyPos[indexPos]
                 del self.army[indexPos]
-                del self.armyMove[indexPos]
                 print("We lost the army {} due to your command!".format(soldierName))
             elif self.game.board[dx][dy] == "WW":
                 self.inv[0] += 2
@@ -486,17 +503,15 @@ class Player():
             soldierName = "Knight"
         elif soldier[0] == "T":
             soldierName = "Scout"
-        
+
         # Call respective move function for specific soldier type
-        print("IN LINE 490!")
-        print(self.armyMove)
         if soldier[0] == "T":
             if origin[0] != destination[0]: # Means moving on X axis
                 if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1) and (origin[0] - destination[0] != -2) and (origin[0] - destination[0] != 2):
                     return False # Neither one or two steps
                 else:
                     print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
-                    self.armyMove[indexPos] -= 1
+                    self.armyMove.append((destination[0],destination[1]))
                     if origin[0] - destination[0] == 2: # Moving left two steps
                         firstStep = (destination[0] + 1,destination[1])
                         movePos(self,origin,firstStep,indexPos,soldier,soldierName)
@@ -517,7 +532,7 @@ class Player():
                     return False
                 else:
                     print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
-                    self.armyMove[indexPos] -= 1
+                    self.armyMove.append((destination[0],destination[1]))
                     if origin[1] - destination[1] == 2: # Moving left two steps
                         firstStep = (destination[0],destination[1] + 1)
                         movePos(self,origin,firstStep,indexPos,soldier,soldierName)
@@ -543,15 +558,11 @@ class Player():
                     return False
             print("\nYou have moved {} from ({}, {}) to ({}, {}).".format(soldierName,origin[0],origin[1],destination[0],destination[1]))
             movePos(self,origin,destination,indexPos,soldier,soldierName)
-            self.armyMove[indexPos] -= 1
+            self.armyMove.append((destination[0],destination[1]))
             return True
 
-    def move(self,year,playerList):
+    def move(self,year,playerList,noSoldiers):
         print("===Player {}'s Stage: Move Armies===\n".format(self.num))
-
-        for i in self.armyMove:
-            if i == 0:
-                i = 1
 
         # Setting enemy player
         if self.num == playerList[0].num:
@@ -559,12 +570,9 @@ class Player():
         else:
             enemyPlayer = playerList[0]
 
-        for i in self.army:         
-            self.armyMove.append(1)
-
         while True:
             invalidResponse = "Invalid move. Try again.\n"
-            if not self.playerArmyList():
+            if not self.playerArmyList(noSoldiers):
                 break
 
             cords = input("\nEnter four integers as a format ‘x0 y0 x1 y1’ to represent move unit from (x0, y0) to (x1, y1) or ‘NO’ to end this turn.\n")

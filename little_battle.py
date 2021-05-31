@@ -169,8 +169,11 @@ if __name__ == "__main__":
 
   while True:
     for player in playerList:
+      # Set number of soldiers
       player.recruit(year)
-      player.move(year,playerList)
+      noSoldiers = len(player.army)-1
+      print(noSoldiers)
+      player.move(year,playerList,noSoldiers)
 
     year += 1
 
