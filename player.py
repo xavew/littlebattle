@@ -225,34 +225,30 @@ class Player():
 
         for i in self.army:
             if i == "H{}".format(n):
-                index += 1
+                #index += 1
+                pass
             elif i == "S{}".format(n):
                 if self.armyMove[index] > 0:
                     spearman += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
+                    #index += 1
             elif i == "A{}".format(n):
                 if self.armyMove[index] > 0:
                     archer += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
+                    #index += 1
             elif i == "K{}".format(n):
                 if self.armyMove[index] > 0:
                     knight += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
+                    #index += 1
             elif i == "T{}".format(n):
                 if self.armyMove[index] > 0:
                     scout += " ({}, {}),".format(self.armyPos[index][0],self.armyPos[index][1])
-                    index += 1
-            else:
-                index += 1
+                    #index += 1
+            index += 1
 
         sum = 0
         for i in self.armyMove:
             sum += i
         sum -= 1
-
-        print("====PLAYERARMYLIST()=====")
-        print(self.armyMove)
-        print(sum)
 
         if sum == 0:
             print("No Army to Move: next turn.\n")
@@ -488,8 +484,6 @@ class Player():
             soldierName = "Scout"
         
         # Call respective move function for specific soldier type
-        print("IN LINE 490!")
-        print(self.armyMove)
         if soldier[0] == "T":
             if origin[0] != destination[0]: # Means moving on X axis
                 if (origin[0] - destination[0] != 1) and (origin[0] - destination[0] != -1) and (origin[0] - destination[0] != -2) and (origin[0] - destination[0] != 2):
